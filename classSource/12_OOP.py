@@ -211,13 +211,217 @@ car1.drive_car(150)
 print()
 car2.drive_car(200)
 
+# =================================================================================================
+
+# 5. 변수와 메서드(함수)의 종류
+'''
+    - 클래스 변수
+        1. 클래스 내부 코드에 생성
+        2. 클래스 메서드에서 생성
+        3. 클래스 코드 바깥에서 클래스명을 통해 생성
+
+    - 인스턴스 변수
+        1. 생성자에서 생성 (self.~~)
+            > 모든 인스턴스가 공통적으로 생성된다.
+
+        2. 인스턴스 메서드에서 생성
+            > 해당 인스턴스 메서드를 호출한 인스턴스만 생성
+
+        3. 클래스 코드 바깥에서 인스턴스명을 통해 생성
+            > 해당 인스턴스에만 생성
+
+    * 클래스변수는 한 번 만들어지면 '클래스'나 '인스턴스'가 접근(사용) 가능하다.
+      인스턴스 변수는 인스턴스별로 독립적으로 생성된다.
+
+    - 클래스 메서드
+        클래스나 인스턴스가 호출 가능
+
+    - 인스턴스 메서드
+        인스턴스를 통해서만 호출 가능 (self에 인스턴스가 대입되어야 한다.)
+'''
+print()
+class Car: # 클래스 정의하는 영역
+    engine = "1000cc" # 클래스 변수
+
+    @classmethod    # 장식자(데코레이터) : 이게 있어야만 클래스메서드!
+    def clsMethod(cls): # class 
+        print("클래스 메서드")
+        cls.clsValue = "클래스 변수" # cls 매개변수는 Car가 대입된다. (Car.clsValue)
+
+    def instMethod(self):
+        print("인스턴스 메서드")
+        
+    
+# 클래스 메서드 호출 --> 클래스명.클래스메서드명()
+Car.clsMethod() # 인스턴스 생성 없이 호출할 수 있다.
+print(Car.engine) # 클래스명.클래스변수
+
+car1 = Car()
+car1.clsMethod()
+print(car1.engine)
+print("clsValue =", Car.clsValue) # clsValue는 clsMethod() 안에서 생성된다.
+# 인스턴스를 통해서 클래스메서드, 클래스 변수 '사용가능'
+
+car1.instMethod() 
+#Car.instMethod() # 오류! 인스턴스 메서드는 '반드시' 인스턴스를 통해서만 호출
+
+car1.sunRoof = "썬루프 옵션 추가"
+#print(Car.sunRoof) # 오류!
+
+# 클래스명으로는 인스턴스 메서드, 인스턴스변수 사용 불가능
+
+
+# 6. 외부 접근 제어
+# 외부 = 클래스가 정의된 코드 바깥
+# public : 외부 접근 허용 - 이름 지을 때 그냥 지으면 됨 (변수/메서드)
+# private : 외부 접근 차단 - 이름 앞에 __(언더바 2개)를 붙이면 됨
+print()
+class Person:
+    name = "이몽룡"            # 클래스 변수, public 
+    __addr = "대구시 중구"     # 클래스 변수, private
+
+    def print_info(self):
+        print("{}님은 {}에 거주합니다.".format(self.name, self.__addr))
+
+    def __print_info(self):
+        print("{}님은 {}에 거주합니다.".format(self.name, self.__addr))
+
+    def print_info2(self):
+        self.__print_info()
+
+
+lee = Person()
+print(lee.name) # 인스턴스를 통한 클래스변수 사용 
+#print(lee.__addr) # 오류! 클래스 바깥 코드에서 접근할 수 없는 private 변수
+
+lee.print_info()
+#lee.__print_info() # 오류!, 이 메서드도 private 
+lee.print_info2()
+
+'''
+    7. 상속 (inheritance)
+        - 무언가를 물려받는다.
+        - 클래스의 상속
+            기존에 정의해놓은 클래스의 기능을 그대로 물려받는 새로운 클래스를 정의한다.
+        - 기반 클래스 : 부모클래스, 슈퍼클래스
+        - 파생 클래스 : 자식클래스, 서브클래스
+
+        - 자식클래스에서는 부모클래스의 변수, 메서드를 사용가능하다.
+
+        [오버라이딩] (재정의)
+            - 부모클래스에 정의된 메서드를 무시하고, 자식클래스에서 같은 이름으로 다시 정의한다.
+'''
+# 부모클래스
+class Person :
+    def __init__(self, name, age):
+        print("Person, 생성자")
+        self.name = name
+        self.age = age
+
+    def print_info(self):
+        print("Person, print_info")
+        print("이름 :", self.name)
+        print("나이 :", self.age)
+
+    def sleep(self):
+        print("Person, sleep")
+        print(self.name + "님은 8시간 잡니다.")
 
 
 
 
+# 자식클래스1
+class Student(Person) : # 상속받을 클래스를 ()안에 적는다.
+    def study(self):
+        print("Student, study")
+        print(self.name + "학생은 6시간 공부합니다.")
+
+    def sleep(self):
+        print("Student, sleep")
+        print(self.name + "학생은 6시간 잡니다.")
+        
+# 부모클래스 인스턴스 생성
+person = Person("홍길동", 20)
+person.print_info()
+person.sleep()
+print()
+# 자식클래스 인스턴스 
+# Student에 생성자를 만들지 않았지만,
+# Person을 물려 받았으므로 자동으로 Person의 생성자가 호출
+student = Student("성춘향", 20)
+# 물려 받은 Person의 메서드 사용 가능
+student.print_info() 
+
+# 자식클래스에 똑같은 이름의 메서드가 있다면 (오버라이딩)
+# 부모의 것이 아닌 자식의 메서드가 호출된다. 
+student.sleep()
+print()
 
 
 
+# 자식클래스2  - 부모클래스의 생성자 호출
+# super().메서드() --> 부모클래스의 메서드 호출
+class Teacher(Person):
+    def __init__(self, name, age):
+        print("Teacher, 생성자")
+        super().__init__(name, age)
+
+    def sleep(self):
+        print("Teacher, sleep")
+        super().sleep()
+        print("선생님은 그렇게 많이 자면 안 됩니다.")
+
+    def work(self):
+        print("Teacher, work")
+        print(self.name + "선생님은 8시간 일합니다.")
+
+teacher = Teacher("이몽룡", 30)
+teacher.print_info()
+teacher.sleep()
+teacher.work()
+
+# 8. 추상 클래스
+'''
+    추상적이다!!
+        --> 동물이라는 클래스를 정의하며, 동물은 운다라는 추상적인 개념만 정의해놓고,
+           각 동물들이 실제로 어떻게 우는지는 각자 정의(자식클래스)하도록 하는 것
+
+        --> 이때 운다라는 메서드를 추상메서드 라고 한다.
+            추상메서드는 자식클래스가 '반드시' 정의해야 한다.
+
+        --> 추상메서드가 있는 클래스가 추상클래스
+
+        ** 반드시 자식클래스에서 직접 메서드를 정의하도록 하고 싶을 때 추상메서드를 사용한다.
+
+[사용방법]
+abc 필요 (abstract base class)
+from abc import *
+
+class 추상클래스명(metaclass=ABCMeta):
+    @abstractmethod
+    def method(self):
+        pass
+
+'''
+from abc import *
+
+class Animal(metaclass=ABCMeta):
+    @abstractmethod
+    def Cry(self):
+        pass
+
+class Dog(Animal):
+    def Cry(self):
+        print("멍멍")
+
+class Cat(Animal):
+    def Cry(self):
+        print("냐옹")
+
+dog = Dog()
+dog.Cry()
+cat = Cat()
+cat.Cry()
 
 
 
