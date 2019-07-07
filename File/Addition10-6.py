@@ -38,21 +38,27 @@
 #         pass
 #
 
-# counter = 0
-# with open("book.txt") as file1:
 
 
-def count_words(fileName):
-    try:
-        with open(fileName) as f_obj:
-            contents = f_obj.read()
-    except FileNotFoundError:
-        msg = "sorry, the file " + fileName + "does not exist"
-        print(msg)
-    else:
-        words = contents.split()
-        num_words = len(words)
-        print("The file " + fileName + " has about " + str(num_words) + " words")
 
-filename = "book2.txt"
-count_words(filename)
+# def count_words(fileName):
+#     try:
+#         with open(fileName) as f_obj:
+#             contents = f_obj.read()
+#     except FileNotFoundError:
+#         msg = "sorry, the file " + fileName + "does not exist"
+#         print(msg)
+#     else:
+#         words = contents.split()
+#         num_words = len(words)
+#         print("The file " + fileName + " has about " + str(num_words) + " words")
+#
+# filename = "book2.txt"
+# count_words(filename)
+
+
+counter = 0
+with open("book2.txt") as file1:
+    contents = file1.read()
+numCount = contents.count("face")
+print(numCount)
