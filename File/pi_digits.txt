@@ -1,0 +1,5 @@
+In python, what I learned so far in this chapter
+In python, when you open a file, you have to use "with" first and then open(file) as something
+In python, you can open file and go through it as a list outside of the with block
+In python, you can use for loop inside of the with block
+In python, you can also read the entire list
